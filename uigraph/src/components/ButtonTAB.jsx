@@ -34,7 +34,7 @@ const OutlinedButtons = () => {
     ;
   const redirectGraph = () => {
 
-    console.log('moving to table');
+    console.log('moving to graph');
     history.push('/graph');
   }
     ;
