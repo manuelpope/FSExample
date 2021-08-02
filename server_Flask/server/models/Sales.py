@@ -1,4 +1,4 @@
-from server_Flask.server.db import db
+from db import db
 
 
 class SalesModel(db.Model):
