@@ -15,11 +15,11 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 api = Api(app)
 
 
-#@app.before_first_request
+# @app.before_first_request
 def create_tables():
     db.create_all()
-    storeA = StoreModel('Sucursal 1', '1420 av Clinton',121312)
-    storeB = StoreModel('Sucursal 2', '1000 cll Emily',324323)
+    storeA = StoreModel('Sucursal 1', '1420 av Clinton', 121312)
+    storeB = StoreModel('Sucursal 2', '1000 cll Emily', 324323)
     storeB.save_to_db()
     storeA.save_to_db()
 
@@ -31,7 +31,7 @@ def populate_sales(idStore):
     for month in range(1, 13):
         total = np.random.randint(1, 200)
         for _ in range(total):
-            mockSale = SalesModel(month, round(np.abs(np.random.uniform(0, 200)),2), idStore)
+            mockSale = SalesModel(month, round(np.abs(np.random.uniform(0, 200)), 2), idStore)
             mockSale.save_to_db()
 
 
@@ -44,7 +44,6 @@ api.add_resource(SeriesTime, '/series')
 api.add_resource(SeriesTimeResume, '/seriesresume')
 api.add_resource(StoresInfo, '/stores')
 api.add_resource(StoresResume, '/storesresume')
-
 
 if __name__ == "__main__":
     db.init_app(app)

@@ -10,27 +10,26 @@ class SeriesTimeResume(Resource):
         sales = [item.json() for item in SalesModel.find_all()]
         amountPerMonth = {}
         quantityPerMonth = {}
-        for m in range(1,13):
-            amountPerMonth[m]=0
-            quantityPerMonth[m]=0
+        for m in range(1, 13):
+            amountPerMonth[m] = 0
+            quantityPerMonth[m] = 0
 
         for sale in sales:
-            amountPerMonth[sale['month']]= round(amountPerMonth[sale['month']]+ sale['price'],0)
+            amountPerMonth[sale['month']] = round(amountPerMonth[sale['month']] + sale['price'], 0)
             quantityPerMonth[sale['month']] = quantityPerMonth[sale['month']] + 1
 
-        sales={
-            'amountPerMonthAllStores':amountPerMonth,
-            'quantityPerMonthAllStores':quantityPerMonth
+        sales = {
+            'amountPerMonthAllStores': amountPerMonth,
+            'quantityPerMonthAllStores': quantityPerMonth
         }
 
         return {'items': sales}, 200
 
+
 class SeriesTime(Resource):
 
-        @classmethod
-        def get(self):
-            sales = [item.json() for item in SalesModel.find_all()]
+    @classmethod
+    def get(self):
+        sales = [item.json() for item in SalesModel.find_all()]
 
-            return {'items': sales}, 200
-
-
+        return {'items': sales}, 200

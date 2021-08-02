@@ -6,10 +6,10 @@ const Graphic = () => {
   const [stateAmount, setStateAmount] = useState([]);
   const [stateQuant, setStateQuant] = useState([]);
 
-  const uri2 = '/seriesresume';
+  const uri1 = '/seriesresume';
 
-  const apiGet = (setStateAmount) => {
-    fetch(uri2, {
+  const apiGet = (setStateAmount,setStateQuant) => {
+    fetch(uri1, {
       headers: {
         'Accept': 'application/json'
       }
