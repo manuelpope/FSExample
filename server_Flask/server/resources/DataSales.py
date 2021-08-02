@@ -15,7 +15,7 @@ class SeriesTimeResume(Resource):
             quantityPerMonth[m]=0
 
         for sale in sales:
-            amountPerMonth[sale['month']]= amountPerMonth[sale['month']]+ sale['price']
+            amountPerMonth[sale['month']]= round(amountPerMonth[sale['month']]+ sale['price'],0)
             quantityPerMonth[sale['month']] = quantityPerMonth[sale['month']] + 1
 
         sales={

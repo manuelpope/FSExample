@@ -41,11 +41,15 @@
         <Table className={useStyles.table} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
-              <TableCell>Dessert (100g serving)</TableCell>
-              <TableCell align="right">Calories</TableCell>
-              <TableCell align="right">Fat&nbsp;(g)</TableCell>
-              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-              <TableCell align="right">Protein&nbsp;(g)</TableCell>
+              <TableCell>Tabla sucursales</TableCell>
+              <TableCell align="right">nombre</TableCell>
+              <TableCell align="right">direccion&nbsp;(g)</TableCell>
+              <TableCell align="right">telf&nbsp;(g)</TableCell>
+              <TableCell align="right">mes&nbsp;(g)</TableCell>
+              <TableCell align="right">ventas&nbsp;(g)</TableCell>
+              <TableCell align="right">monto&nbsp;(g)</TableCell>
+
+
             </TableRow>
           </TableHead>
           <TableBody>

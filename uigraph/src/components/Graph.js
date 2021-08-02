@@ -3,10 +3,12 @@ import { useEffect } from 'react'; import { LineChart, Line, XAxis, YAxis, Carte
 
 
 const Graphic = () => {
-  const [state, setState] = useState([]);
-  const uri2 = '/series';
+  const [stateAmount, setStateAmount] = useState([]);
+  const [stateQuant, setStateQuant] = useState([]);
 
-  const apiGet = (setState) => {
+  const uri2 = '/seriesresume';
+
+  const apiGet = (setStateAmount) => {
     fetch(uri2, {
       headers: {
         'Accept': 'application/json'
@@ -18,11 +20,25 @@ const Graphic = () => {
 
       .then(data => {
         //console.log("dataSeries: ",data)
-        
+        var resultAmount = [];
+        var resultQuant = [];
 
-        console.log(data)
 
-        setState(data.items)
+        for (var i in data.items.amountPerMonthAllStores)
+          resultAmount.push(new Object({
+            name: i.toString(),
+            amount: data.items.amountPerMonthAllStores[i]
+          }));
+        for (var i in data.items.amountPerMonthAllStores)
+          resultQuant.push(new Object({
+            name: i.toString(),
+            quantity: data.items.quantityPerMonthAllStores[i]
+          }));
+
+
+        setStateAmount(resultAmount)
+
+        setStateQuant(resultQuant)
       }
       ).catch(err => console.log(err));
   };
@@ -30,8 +46,7 @@ const Graphic = () => {
 
   useEffect(() => {
 
-    apiGet(setState);
-
+    apiGet(setStateAmount, setStateQuant);
 
 
 
@@ -43,74 +58,60 @@ const Graphic = () => {
 
   }, []);
 
-  const data = [
-    {
-      name: 'Page A',
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: 'Page B',
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: 'Page C',
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: 'Page D',
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: 'Page E',
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: 'Page F',
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: 'Page G',
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
-  ];
+
 
   return (
-    <ResponsiveContainer width={700} height={300}>
-      <LineChart
-        width={100}
-        height={100}
-        data={state}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-        <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-      </LineChart>
-    </ResponsiveContainer>
+
+
+    <div>
+      {stateAmount &&
+        <LineChart
+          width={1500}
+          height={300}
+          data={stateAmount}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey="amount" stroke="#8884d8" activeDot={{ r: 8 }} />
+        </LineChart>
+      }
+      {stateQuant &&
+        <LineChart
+          width={1500}
+          height={300}
+          data={stateQuant}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey="quantity" stroke="#8884d8" activeDot={{ r: 8 }} />
+        </LineChart>
+      }
+
+    </div>
+
   );
+
+
 }
 
 export default Graphic;

@@ -7,17 +7,22 @@ class StoreModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     address = db.Column(db.String(80))
+    telf = db.Column(db.Integer)
 
     items = db.relationship('SalesModel', lazy='dynamic')
 
-    def __init__(self, name, address):
+    def __init__(self, name, address,telf):
         self.name = name
         self.address = address
+        self.telf = telf
+
 
     def json(self):
         return {
             'id': self.id,
             'name': self.name,
+            'address':self.address,
+            'telf': self.telf,
             'items': [item.json() for item in self.items.all()]
         }
 
