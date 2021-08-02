@@ -33,9 +33,12 @@ def populate_sales(idStore):
         for _ in range(total):
             mockSale = SalesModel(month, np.abs(np.random.uniform(0, 200)), idStore)
             mockSale.save_to_db()
+
+
 @app.route("/")
 def status():
-    return {'message': 'running status ok - green'},200
+    return {'message': 'running status ok - green'}, 200
+
 
 api.add_resource(SeriesTime, '/series')
 api.add_resource(StoresInfo, '/stores')
