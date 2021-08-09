@@ -45,6 +45,7 @@ api.add_resource(SeriesTimeResume, '/seriesresume')
 api.add_resource(StoresInfo, '/stores')
 api.add_resource(StoresResume, '/storesresume')
 
+db.init_app(app)
 if __name__ == "__main__":
-    db.init_app(app)
+
     app.run(host="0.0.0.0", port=3001, debug=True, threaded=True)
