@@ -16,4 +16,4 @@ services:
     container_name: nginx
     restart: always
     ports:
-      - "81:80"
+      - "3001:80"
