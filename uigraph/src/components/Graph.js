@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react'; import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
+import './main.css';
 
 const Graphic = () => {
   const [stateAmount, setStateAmount] = useState([]);
@@ -63,14 +63,15 @@ const Graphic = () => {
   return (
 
 
-    <div>
+    <div className='big-screen'>
       {stateAmount &&
+
+<ResponsiveContainer width="80%" height="95%">
         <LineChart
-          width={1500}
-          height={300}
+       
           data={stateAmount}
           margin={{
-            top: 5,
+            top: 50 ,
             right: 30,
             left: 20,
             bottom: 5,
@@ -84,19 +85,23 @@ const Graphic = () => {
           <Legend />
           <Line type="monotone" dataKey="amount" stroke="#8884d8" activeDot={{ r: 8 }} />
         </LineChart>
+        </ResponsiveContainer>
       }
       {stateQuant &&
+
+      <ResponsiveContainer width="80%" height="95%">
+
         <LineChart
-          width={1500}
-          height={300}
+
           data={stateQuant}
           margin={{
-            top: 5,
+            top: 50,
             right: 30,
             left: 20,
             bottom: 5,
           }}
         >
+         
 
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
@@ -105,7 +110,9 @@ const Graphic = () => {
           <Legend />
           <Line type="monotone" dataKey="quantity" stroke="#8884d8" activeDot={{ r: 8 }} />
         </LineChart>
+        </ResponsiveContainer>
       }
+      
 
     </div>
 
