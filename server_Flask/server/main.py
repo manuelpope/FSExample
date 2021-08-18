@@ -6,7 +6,7 @@ from db import db
 from models.Sales import SalesModel
 from models.Stores import StoreModel
 from resources.DataSales import SeriesTime, SeriesTimeResume
-from resources.DataStore import StoresInfo, StoresResume
+from resources.DataStore import StoresInfo, StoresResume, RemoteApi
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -44,6 +44,7 @@ api.add_resource(SeriesTime, '/series')
 api.add_resource(SeriesTimeResume, '/seriesresume')
 api.add_resource(StoresInfo, '/stores')
 api.add_resource(StoresResume, '/storesresume')
+api.add_resource(RemoteApi, '/remote')
 
 db.init_app(app)
 if __name__ == "__main__":
