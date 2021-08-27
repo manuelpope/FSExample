@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react'; import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import './main.css';
+import '../styles/main.css';
 
 const Graphic = () => {
   const [stateAmount, setStateAmount] = useState([]);
   const [stateQuant, setStateQuant] = useState([]);
 
   const uri1 = '/seriesresume';
+  let flag;
 
   const apiGet = (setStateAmount,setStateQuant) => {
     fetch(uri1, {
@@ -20,25 +21,10 @@ const Graphic = () => {
 
       .then(data => {
         //console.log("dataSeries: ",data)
-        var resultAmount = [];
-        var resultQuant = [];
 
+        setStateAmount(dataExtraction(data,'amount'))
 
-        for (var i in data.items.amountPerMonthAllStores)
-          resultAmount.push(new Object({
-            name: i.toString(),
-            amount: data.items.amountPerMonthAllStores[i]
-          }));
-        for (var i in data.items.amountPerMonthAllStores)
-          resultQuant.push(new Object({
-            name: i.toString(),
-            quantity: data.items.quantityPerMonthAllStores[i]
-          }));
-
-
-        setStateAmount(resultAmount)
-
-        setStateQuant(resultQuant)
+        setStateQuant(dataExtraction(data,''))
       }
       ).catch(err => console.log(err));
   };
@@ -122,3 +108,23 @@ const Graphic = () => {
 }
 
 export default Graphic;
+
+function dataExtraction(data, flag) {
+  let resultAmount = [];
+
+  if(flag==='amount'){
+    for (var i in data.items.amountPerMonthAllStores)
+    resultAmount.push(new Object({
+      name: i.toString(),
+      amount: data.items.amountPerMonthAllStores[i]
+    }));
+    return resultAmount;
+  }
+
+  for (var i in data.items.amountPerMonthAllStores)
+    resultAmount.push(new Object({
+      name: i.toString(),
+      quantity: data.items.quantityPerMonthAllStores[i]
+    }));
+    return resultAmount;
+}

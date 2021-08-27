@@ -1,0 +1,44 @@
+.header{
+    text-align: left;
+    border: 2px solid black;
+    border-radius: 5%;
+    border-style:groove;
+}
+
+.logo{
+    height: 40px;
+    width: 40px;
+    top:12px;
+    left:15px;
+    position: relative;
+}
+
+.title a{
+    color: black;
+    text-decoration: none;
+    position: absolute;
+    top:14px;
+    left:1.5cm;
+}
+
+.topnav {
+    background-color: whitesmoke;
+    overflow: hidden;
+    box-shadow: 0 2px 4px 0 grey;    
+  }
+
+.Login a{
+    color: black;
+    text-decoration: none;
+    position: absolute;
+    left:90%;
+    top:20px;
+}
+
+.user a{
+    color: black;
+    text-decoration: none;
+    position: absolute;
+    left:80%;
+    top:20px;
+}

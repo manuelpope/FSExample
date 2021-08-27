@@ -1,0 +1,12 @@
+.SadFace{
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
+    width: 200px;
+    height: 200px;
+    padding-top: 1cm;
+}
+
+.content{
+    text-align: center;
+    font-size: x-large;
+}
