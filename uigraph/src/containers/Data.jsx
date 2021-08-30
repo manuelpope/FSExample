@@ -1,5 +1,7 @@
 import React, {useState, useContext} from 'react';
 import {Link} from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import { useHistory } from "react-router-dom";
 import '../styles/Data.css';
 import AppContext from '../context/AppContext';
 
@@ -8,6 +10,7 @@ function Data(){
 	const {login} = useContext(AppContext);
 	const [selectedFile, setSelectedFile] = useState();
 	const [isSelected, setIsSelected] = useState(false);
+	const history = useHistory();
 
 	const changeHandler = (event) => {
 		setSelectedFile(event.target.files[0]);
@@ -33,12 +36,17 @@ function Data(){
 		)
 	};
 
+	const redirectHome = () => {
+		history.push('/Admin');
+	  }
+		;
+
 	return(
 		<div>
-			{login.data.access_token===null && <div>
+			{/*login.data.access_token===null && <div>
 			{window.location.href="/Login"}
-			</div>}    
-			{login.data.access_token!==null && <div>
+			</div>*/}    
+			{login.data.access_token===null && <div>
 			<div className="upload">
 				<input className="Button" type="file" name="file" onChange={changeHandler}/>
 				{isSelected ? (
@@ -56,7 +64,9 @@ function Data(){
 					<button className="ButtonSubmit" onClick={handleSubmission}>Submit</button>
 				</div>            
 			</div>
-			<Link to="/Admin"><div id="backbutton"></div></Link>
+			<Button id='backbutton' size='large' onClick={redirectHome} variant="outlined" color="secondary">
+        		Back
+      		</Button>
 		</div>}
 	  </div>
 	)

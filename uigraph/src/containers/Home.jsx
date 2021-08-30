@@ -7,6 +7,8 @@ const Home = () =>{
     
     return (        
         <div>
+            <div id="pulsating-circle1"/>
+            <div id="pulsating-circle2"/>
             <div>
                 <h1 className='typewrite'>
                     <Typewriter

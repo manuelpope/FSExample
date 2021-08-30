@@ -13,6 +13,7 @@ const Admin = () =>{
           {window.location.href="/Login"}
         </div>*/}    
         {login.data.access_token===null && <div>
+          <h1 id='title'>Main Panel</h1>
           <OutlinedButtons /> 
         </div>}
     </div>

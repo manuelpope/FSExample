@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import Button from '@material-ui/core/Button';
+import { useHistory } from "react-router-dom";
 import { useEffect } from 'react'; import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import '../styles/main.css';
 
 const Graphic = () => {
   const [stateAmount, setStateAmount] = useState([]);
   const [stateQuant, setStateQuant] = useState([]);
+  const history = useHistory();
 
   const uri1 = '/seriesresume';
   let flag;
@@ -44,12 +47,16 @@ const Graphic = () => {
 
   }, []);
 
-
+	const redirectHome = () => {
+		history.push('/Admin');
+	  }
+		;
 
   return (
 
 
     <div className='big-screen'>
+
       {stateAmount &&
 
 <ResponsiveContainer width="80%" height="95%">
@@ -97,8 +104,11 @@ const Graphic = () => {
           <Line type="monotone" dataKey="quantity" stroke="#8884d8" activeDot={{ r: 8 }} />
         </LineChart>
         </ResponsiveContainer>
+
       }
-      
+          <Button id='backbuttongraph' size='large' onClick={redirectHome} variant="outlined" color="secondary">
+                Back
+          </Button>
 
     </div>
 

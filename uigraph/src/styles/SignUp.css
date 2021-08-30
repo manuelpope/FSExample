@@ -36,7 +36,7 @@
     text-align:center;
     line-height:50px;
     font-size:30px;
-    color:rgba(235,235,235,1);
+    color:black;
     font-weight:bold;
     z-index:5;
     position:absolute;
@@ -46,7 +46,7 @@
     height:80%;
     top:10%;
     left:4%;  
-    background-color:rgb(19, 20, 22);
+    background-color:white;
   }
 
   .SignUpform{
@@ -54,7 +54,7 @@
       padding-bottom: 1cm;
   }
   .SignUpform input{
-    background-color: black;
+    background-color:white;
     color:rgb(126, 126, 126);
     border-radius: 10%;
     border-top-left-radius: 1cm;

@@ -5,6 +5,8 @@ import Graphic from '../components/Graph';
 import SaveList from '../components/DailyInfo';
 import '../styles/App.css';
 import Home from '../containers/Home';
+import Admin from '../containers/Admin';
+import Data from '../containers/Data';
 import Login from '../containers/Login';
 import Logout from '../containers/Logout';
 import SignUp from '../containers/SignUp';
@@ -38,6 +40,8 @@ function App() {
         <Layout>          
           <Switch>                  
               <Route exact path="/" component={Home} />
+              <Route exact path='/Admin' component={Admin}/>
+              <Route exact path='/Data' component={Data}/>
               <Route exact path='/table' component={TableData}/>
               <Route exact path='/graph' component={Graphic}/>
               <Route exact path='/graph' component={Graphic}/>
