@@ -1,0 +1,14 @@
+.upload{
+    position: relative;
+    padding-top: 8%;
+    text-align: center;
+}
+
+.info{
+    color:white;
+}
+
+#backbutton {
+    left:46%;
+    margin-top:10%;
+  }
