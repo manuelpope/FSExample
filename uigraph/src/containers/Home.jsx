@@ -31,9 +31,6 @@ const Home = () =>{
                                 .pauseFor(2000)
                                 .deleteAll()
                                 .start();
-
-
-                                
                         }}
                     />
                 </h1>
