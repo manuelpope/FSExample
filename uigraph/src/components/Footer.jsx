@@ -5,7 +5,7 @@ const Footer = () =>{
     return (
         <div className="Footer">
             <p className="Footer-title">Bayona &amp; Riaño Analytics App</p>
-            <p className="Footer-copy">Bogotá, Colombia 2021</p>
+            <p className="Footer-copy">From Colombia To Everywhere</p>
         </div>
     );
 }

@@ -27,7 +27,7 @@ const Home = () =>{
                                 .typeString("Easy to chart with lovely style.")
                                 .pauseFor(2000)
                                 .deleteAll()
-                                .typeString("Tokens, KPIs, Alerts and much more!")
+                                .typeString("Security, KPIs, Alerts and much more!")
                                 .pauseFor(2000)
                                 .deleteAll()
                                 .start();
