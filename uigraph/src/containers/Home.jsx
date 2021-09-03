@@ -1,4 +1,3 @@
-import React, {useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import Typewriter from "typewriter-effect";
 import '../styles/Home.css';
@@ -30,10 +29,7 @@ const Home = () =>{
                                 .typeString("Security, KPIs, Alerts and much more!")
                                 .pauseFor(2000)
                                 .deleteAll()
-                                .start();
-
-
-                                
+                                .start();                               
                         }}
                     />
                 </h1>

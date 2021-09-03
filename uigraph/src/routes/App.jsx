@@ -7,6 +7,10 @@ import '../styles/App.css';
 import Home from '../containers/Home';
 import Admin from '../containers/Admin';
 import Data from '../containers/Data';
+import Profile from '../containers/Profile';
+import Alerts from '../containers/Alerts';
+import Kpis from '../containers/Kpis';
+import About from '../containers/About';
 import Login from '../containers/Login';
 import Logout from '../containers/Logout';
 import SignUp from '../containers/SignUp';
@@ -43,6 +47,10 @@ function App() {
               <Route exact path='/Admin' component={Admin}/>
               <Route exact path='/Data' component={Data}/>
               <Route exact path='/table' component={TableData}/>
+              <Route exact path='/profile' component={Profile}/>
+              <Route exact path='/alerts' component={Alerts}/>
+              <Route exact path='/kpis' component={Kpis}/>
+              <Route exact path='/about' component={About}/>
               <Route exact path='/graph' component={Graphic}/>
               <Route exact path='/graph' component={Graphic}/>
               <Route exact path='/remote' component={SaveList}/>
