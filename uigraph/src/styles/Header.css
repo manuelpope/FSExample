@@ -27,12 +27,20 @@
     box-shadow: 0 2px 4px 0 grey;    
   }
 
-.Login a{
+#Login{
     color: black;
     text-decoration: none;
-    position: absolute;
-    left:90%;
-    top:20px;
+    position: Absolute;
+    left:31cm;
+    top:-30px;
+}
+
+#Login2{
+    color: black;
+    text-decoration: none;
+    position: Absolute;
+    left:25cm;
+    top:-26px;
 }
 
 .user a{
@@ -41,4 +49,10 @@
     position: absolute;
     left:80%;
     top:20px;
+}
+
+.Option a{
+    color: black;
+    text-decoration: none;
+    position:relative;
 }
