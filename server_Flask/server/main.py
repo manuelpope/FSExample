@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import numpy as np
 from apscheduler.scheduler import Scheduler
 from flask import Flask
@@ -42,9 +44,9 @@ def populate_sales(idStore):
 def status():
     return {'message': 'running status ok - green'}, 200
 
-@scheduler.interval_schedule(minutes=1, misfire_grace_time=10)
+@scheduler.interval_schedule(seconds=30, misfire_grace_time=2)
 def job_function():
-   print("this is the function reviewing table of tasks")
+   print("this is the function reviewing table of tasks   at :: "+ str(datetime.now()))
 
 
 api.add_resource(SeriesTime, '/series')
