@@ -9,6 +9,7 @@ from models.Sales import SalesModel
 from models.Stores import StoreModel
 from resources.DataSales import SeriesTime, SeriesTimeResume
 from resources.DataStore import StoresInfo, StoresResume, RemoteApi
+from models.Alert import Alert
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -18,7 +19,7 @@ api = Api(app)
 sched = BackgroundScheduler()
 
 
-# @app.before_first_request
+@app.before_first_request
 def create_tables():
     db.create_all()
     storeA = StoreModel('Sucursal 1', '1420 av Clinton', 121312)
@@ -28,6 +29,8 @@ def create_tables():
 
     populate_sales(1)
     populate_sales(2)
+    alertTest= Alert(entity="sales",value=124.45,field= "price",condition='greater')
+    alertTest.save_to_db()
 
 
 def populate_sales(idStore):
