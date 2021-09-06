@@ -1,10 +1,9 @@
 from datetime import datetime
 
 import numpy as np
-from apscheduler.scheduler import Scheduler
 from flask import Flask
 from flask_restful import Api
-
+from apscheduler.schedulers.background import BackgroundScheduler
 from db import db
 from models.Sales import SalesModel
 from models.Stores import StoreModel
@@ -16,8 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
 api = Api(app)
-scheduler = Scheduler()
-scheduler.start()
+sched = BackgroundScheduler()
 
 
 # @app.before_first_request
@@ -44,9 +42,12 @@ def populate_sales(idStore):
 def status():
     return {'message': 'running status ok - green'}, 200
 
-@scheduler.interval_schedule(seconds=30, misfire_grace_time=2)
+
+@sched.scheduled_job('interval', id='my_job_id', seconds=5)
 def job_function():
    print("this is the function reviewing table of tasks   at :: "+ str(datetime.now()))
+
+sched.start()
 
 
 api.add_resource(SeriesTime, '/series')
@@ -56,6 +57,7 @@ api.add_resource(StoresResume, '/storesresume')
 api.add_resource(RemoteApi, '/remote')
 
 db.init_app(app)
+
 if __name__ == "__main__":
 
     app.run(host="0.0.0.0", port=3001, debug=True, threaded=True)
