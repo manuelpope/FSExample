@@ -1,4 +1,5 @@
 import numpy as np
+from apscheduler.scheduler import Scheduler
 from flask import Flask
 from flask_restful import Api
 
@@ -13,6 +14,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
 api = Api(app)
+scheduler = Scheduler()
+scheduler.start()
 
 
 # @app.before_first_request
@@ -38,6 +41,10 @@ def populate_sales(idStore):
 @app.route("/")
 def status():
     return {'message': 'running status ok - green'}, 200
+
+@scheduler.interval_schedule(minutes=1, misfire_grace_time=10)
+def job_function():
+   print("this is the function reviewing table of tasks")
 
 
 api.add_resource(SeriesTime, '/series')
