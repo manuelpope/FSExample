@@ -3,20 +3,18 @@ from datetime import datetime
 from db import db
 
 
-class Alert(db.Model):
-    __tablename__ = 'alert'
+class AlertModel(db.Model):
+    __tablename__ = 'alerts'
 
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.Float(precision=2))
     field = db.Column(db.String(80))
     entity = db.Column(db.String(80))
     condition = db.Column(db.String(80))
-
     sended = db.Column(db.Boolean, default=False)
     time_stamp = db.Column(db.DateTime, default=datetime.utcnow)
 
-
-    def __init__(self, value,field,entity,condition):
+    def __init__(self, value, field, entity, condition):
         self.entity = entity
         self.value = value
         self.field = field
@@ -27,7 +25,9 @@ class Alert(db.Model):
             'id': self.id,
             'entity': self.entity,
             'sended': self.sended,
-            'time_date': self.time_stamp
+            'time_date': str(self.time_stamp.strftime("%m/%d/%Y, %H:%M:%S")),
+            'condition': self.condition,
+            'value':self.value
         }
 
     @classmethod
@@ -38,6 +38,9 @@ class Alert(db.Model):
     def find_pending(cls):
         return cls.query.filter_by(sended=False).firts()
 
+    @classmethod
+    def find_by_entity(cls,nameEntity):
+        return cls.query.filter_by(entity=nameEntity).all()
 
     def save_to_db(self):
         db.session.add(self)
