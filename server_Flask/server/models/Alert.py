@@ -27,7 +27,7 @@ class AlertModel(db.Model):
             'sended': self.sended,
             'time_date': str(self.time_stamp.strftime("%m/%d/%Y, %H:%M:%S")),
             'condition': self.condition,
-            'value':self.value
+            'value': self.value
         }
 
     @classmethod
@@ -39,7 +39,7 @@ class AlertModel(db.Model):
         return cls.query.filter_by(sended=False).firts()
 
     @classmethod
-    def find_by_entity(cls,nameEntity):
+    def find_by_entity(cls, nameEntity):
         return cls.query.filter_by(entity=nameEntity).all()
 
     def save_to_db(self):
