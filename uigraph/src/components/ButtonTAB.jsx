@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { useHistory } from "react-router-dom";
-import '../styles/Admin.css';
 
 
 
@@ -21,6 +20,12 @@ const OutlinedButtons = () => {
       },
     },
   }));
+  const redirectHome = () => {
+
+    console.log('moving to home');
+    history.push('/');
+  }
+    ;
   const redirectTable = () => {
 
     console.log('moving to table');
@@ -33,23 +38,18 @@ const OutlinedButtons = () => {
     history.push('/graph');
   }
     ;
-    const redirectUpload = () => {
 
-      console.log('moving to graph');
-      history.push('/Data');
-    }
-      ;
 
 
   return (
     <div className={useStyles.root}>
-      <Button id='button1' size='large' onClick={redirectUpload} variant="outlined" color="primary" >
-        Upload
+      <Button onClick={redirectHome} variant="outlined" color="primary" >
+        Home
       </Button>
-      <Button id='button2' size='large' onClick={redirectTable} variant="outlined" color="secondary">
+      <Button onClick={redirectTable} variant="outlined" color="secondary">
         Table
       </Button>
-      <Button id='button3' size='large' onClick={redirectGraph} variant="outlined" color="secondary">
+      <Button onClick={redirectGraph} variant="outlined" color="secondary">
         Graph
       </Button>
     </div>

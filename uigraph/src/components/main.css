@@ -9,15 +9,3 @@
 .big-screen p {
   padding-top: 5%;
 }
-
-#backbuttongraph{
-  position: absolute;
-  left:85%;
-  top:40%;
-}
-
-#backbuttontable{
-  align-items:center;
-  left:45%;
-  position: absolute;
-}
