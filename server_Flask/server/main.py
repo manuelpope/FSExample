@@ -56,7 +56,7 @@ def job_function():
     with app.app_context():
         list_task = TaskModel.find_pending()
         if list_task:
-            print("processing sending mail alert", list_task)
+            print("processing sending mail alert", len(list_task))
             print("changing sent flag status")
             for task in list_task:
                 task.sended_mail = 1
