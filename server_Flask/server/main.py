@@ -3,6 +3,7 @@ from datetime import datetime
 import numpy as np
 
 from flask import Flask,Response
+import requests
 from flask_restful import Api
 import queue
 
@@ -16,7 +17,6 @@ from resources.DataSales import SeriesTime, SeriesTimeResume
 from resources.DataStore import StoresInfo, StoresResume, RemoteApi
 
 
-
 ################################################### Global objects######################################
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -24,9 +24,20 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
 api = Api(app)
 
-
+TOKEN="XXXXXXX"
+CHAT_ID="xxxxxxx"
 
 ########################## Controller mapping  without classes ###########################################
+
+def bot_send_text(bot_message):
+    bot_token = TOKEN
+    bot_chatID = CHAT_ID
+    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
+    print(send_text)
+    response = requests.get(send_text)
+
+    return response
+
 
 # @app.before_first_request
 def create_tables():
@@ -55,7 +66,6 @@ def populate_sales(idStore):
 def status():
     return {'message': 'running status ok - green'}, 200
 
-
 @sched.scheduled_job('interval', id='my_job_id', seconds=30)
 def job_function():
     print("this is the function reviewing table of tasks   at :: " + str(datetime.now()))
@@ -66,9 +76,12 @@ def job_function():
             msg = f'data: {"refresh"}\n\n'
             announcer.announce(msg=msg)
 
+
             print("processing sending mail alert", len(list_task))
             print("changing sent flag status")
             for task in list_task:
+                r = bot_send_text(str(task.json()))
+                print(r)
                 task.sended_mail = 1
                 task.save_to_db()
 
