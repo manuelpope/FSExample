@@ -10,7 +10,8 @@
 
 # production
 /build
-
+/server_Flask/venv
+.pyc
 # misc
 .DS_Store
 .env.local

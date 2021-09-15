@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
+import Button from '@material-ui/core/Button';
+import { useHistory } from "react-router-dom";
 import { useEffect } from 'react'; import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import './main.css';
+import '../styles/main.css';
 
 const Graphic = () => {
   const [stateAmount, setStateAmount] = useState([]);
   const [stateQuant, setStateQuant] = useState([]);
+  const history = useHistory();
 
   const uri1 = '/seriesresume';
+  let flag;
 
   const apiGet = (setStateAmount,setStateQuant) => {
     fetch(uri1, {
@@ -20,25 +24,10 @@ const Graphic = () => {
 
       .then(data => {
         //console.log("dataSeries: ",data)
-        var resultAmount = [];
-        var resultQuant = [];
 
+        setStateAmount(dataExtraction(data,'amount'))
 
-        for (var i in data.items.amountPerMonthAllStores)
-          resultAmount.push(new Object({
-            name: i.toString(),
-            amount: data.items.amountPerMonthAllStores[i]
-          }));
-        for (var i in data.items.amountPerMonthAllStores)
-          resultQuant.push(new Object({
-            name: i.toString(),
-            quantity: data.items.quantityPerMonthAllStores[i]
-          }));
-
-
-        setStateAmount(resultAmount)
-
-        setStateQuant(resultQuant)
+        setStateQuant(dataExtraction(data,''))
       }
       ).catch(err => console.log(err));
   };
@@ -58,12 +47,16 @@ const Graphic = () => {
 
   }, []);
 
-
+	const redirectHome = () => {
+		history.push('/Admin');
+	  }
+		;
 
   return (
 
 
     <div className='big-screen'>
+
       {stateAmount &&
 
 <ResponsiveContainer width="80%" height="95%">
@@ -111,8 +104,11 @@ const Graphic = () => {
           <Line type="monotone" dataKey="quantity" stroke="#8884d8" activeDot={{ r: 8 }} />
         </LineChart>
         </ResponsiveContainer>
+
       }
-      
+          <Button id='backbuttongraph' size='large' onClick={redirectHome} variant="outlined" color="secondary">
+                Back
+          </Button>
 
     </div>
 
@@ -122,3 +118,23 @@ const Graphic = () => {
 }
 
 export default Graphic;
+
+function dataExtraction(data, flag) {
+  let resultAmount = [];
+
+  if(flag==='amount'){
+    for (var i in data.items.amountPerMonthAllStores)
+    resultAmount.push(new Object({
+      name: i.toString(),
+      amount: data.items.amountPerMonthAllStores[i]
+    }));
+    return resultAmount;
+  }
+
+  for (var i in data.items.amountPerMonthAllStores)
+    resultAmount.push(new Object({
+      name: i.toString(),
+      quantity: data.items.quantityPerMonthAllStores[i]
+    }));
+    return resultAmount;
+}

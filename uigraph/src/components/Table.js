@@ -1,6 +1,3 @@
-
-
-
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,14 +8,16 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-
+import Button from '@material-ui/core/Button';
+import { useHistory } from "react-router-dom";
+import '../styles/main.css';
 
 
 const TableData = () => {
 
 
   const [stateSucursal, setStateSucursal] = useState([]);
-
+  const history = useHistory();
 
   const uri2 = '/storesresume';
   const uri1 = '/stores';
@@ -95,7 +94,10 @@ const TableData = () => {
     },
   });
 
-
+	const redirectHome = () => {
+		history.push('/Admin');
+	  }
+		;
 
   return (
     <TableContainer component={Paper}>
@@ -129,6 +131,9 @@ const TableData = () => {
           ))}
         </TableBody>
       </Table>
+      <Button id='backbuttontable' size='large' onClick={redirectHome} variant="outlined" color="secondary">
+          Back
+      </Button>
     </TableContainer>
   );
 }
