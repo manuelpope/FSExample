@@ -1,11 +1,12 @@
 from datetime import datetime
 
 import numpy as np
-from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask
-from flask_restful import Api
 
-from db import db
+from flask import Flask,Response
+from flask_restful import Api
+import queue
+
+from Factory import db,sched,announcer
 from models.Alert import AlertModel
 from models.Sales import SalesModel
 from models.Stores import StoreModel
@@ -14,13 +15,18 @@ from resources.DataAlert import ControllerAlert, ControllerPushData
 from resources.DataSales import SeriesTime, SeriesTimeResume
 from resources.DataStore import StoresInfo, StoresResume, RemoteApi
 
+
+
+################################################### Global objects######################################
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
 api = Api(app)
-sched = BackgroundScheduler()
 
+
+
+########################## Controller mapping  without classes ###########################################
 
 # @app.before_first_request
 def create_tables():
@@ -50,12 +56,16 @@ def status():
     return {'message': 'running status ok - green'}, 200
 
 
-@sched.scheduled_job('interval', id='my_job_id', seconds=60)
+@sched.scheduled_job('interval', id='my_job_id', seconds=30)
 def job_function():
     print("this is the function reviewing table of tasks   at :: " + str(datetime.now()))
     with app.app_context():
         list_task = TaskModel.find_pending()
         if list_task:
+
+            msg = f'data: {"refresh"}\n\n'
+            announcer.announce(msg=msg)
+
             print("processing sending mail alert", len(list_task))
             print("changing sent flag status")
             for task in list_task:
@@ -63,8 +73,29 @@ def job_function():
                 task.save_to_db()
 
 
-# enable to start scheduling tasks
-sched.start()
+
+
+
+@app.route('/listen', methods=['GET'])
+def listen():
+
+    def stream():
+
+        messages = announcer.listen()  # returns a queue.Queue
+        while True:
+            msg = messages.get()  # blocks until a new message arrives
+            print('\n'+msg)
+            yield msg
+
+    return Response(stream(), mimetype='text/event-stream',headers={
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'transfer-enconding':'chunked','Connection': 'Keep-Alive',
+        'Keep-Alive': 'timeout=5, max = 1000'})
+
+
+############################## controllers from classes crud Resources ####################################
+
+
 
 api.add_resource(SeriesTime, '/series')
 api.add_resource(SeriesTimeResume, '/seriesresume')
@@ -74,6 +105,12 @@ api.add_resource(RemoteApi, '/remote')
 api.add_resource(ControllerAlert, '/getalerts')
 api.add_resource(ControllerPushData, '/postalert')
 
+
+
+# enable to start scheduling tasks & DataBase
+
+
+sched.start()
 db.init_app(app)
 
 

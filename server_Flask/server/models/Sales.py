@@ -1,4 +1,4 @@
-from db import db
+from Factory import db
 
 
 class SalesModel(db.Model):

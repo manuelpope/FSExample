@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from db import db
+from Factory import db
 
 
 class TaskModel(db.Model):
