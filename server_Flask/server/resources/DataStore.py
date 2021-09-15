@@ -52,7 +52,6 @@ def accumulateQuantity(dictMonths, elem):
     return dictMonths
 
 
-
 class RemoteApi(Resource):
 
     @classmethod
@@ -60,9 +59,7 @@ class RemoteApi(Resource):
         r = requests.get('https://www.xm.com.co/despachonacional/2021-08/dDEC0818_NAL.TXT', verify=False,
                          allow_redirects=True)
 
-        r= r.text.split("\r\n")
-        r= [elem.replace('\"',"")for elem in r]
-
+        r = r.text.split("\r\n")
+        r = [elem.replace('\"', "") for elem in r]
 
         return {'data': r}, 200
-

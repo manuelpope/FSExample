@@ -1,6 +1,24 @@
-from flask_restful import Resource
-
+from flask_restful import Resource, reqparse
 from models.Sales import SalesModel
+from models.Task import TaskModel
+from service.validator import Validator_Sale
+
+_parser_request_sale = reqparse.RequestParser()
+_parser_request_sale.add_argument('month',
+                                  type=int,
+                                  required=True,
+                                  help="This field cannot be blank."
+                                  )
+_parser_request_sale.add_argument('price',
+                                  type=float,
+                                  required=True,
+                                  help="This field cannot be blank."
+                                  )
+_parser_request_sale.add_argument('store_id',
+                                  type=int,
+                                  required=True,
+                                  help="This field cannot be blank."
+                                  )
 
 
 class SeriesTimeResume(Resource):
@@ -24,6 +42,20 @@ class SeriesTimeResume(Resource):
         }
 
         return {'items': sales}, 200
+
+    @classmethod
+    def post(self):
+        data = _parser_request_sale.parse_args()
+        sale = SalesModel(**data)
+        sale.save_to_db()
+        list_condition_id = Validator_Sale.validate_condition('sales', 'price', sale.price)
+        if len(list_condition_id) > 0:
+            # setting new task to do it with async validation
+            print("logic to populate table task pending mail" + str(list_condition_id))
+            for elem in list_condition_id:
+                task = TaskModel('sales_price', elem)
+                task.save_to_db()
+        return {'sale': sale.json()}, 200
 
 
 class SeriesTime(Resource):
