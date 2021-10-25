@@ -4,7 +4,7 @@ import numpy as np
 
 from flask import Flask,Response
 import requests
-from flask_restful import Api
+from flask_restful import Api,Resource
 import queue
 
 from Factory import db,sched,announcer
@@ -15,6 +15,12 @@ from models.Task import TaskModel
 from resources.DataAlert import ControllerAlert, ControllerPushData
 from resources.DataSales import SeriesTime, SeriesTimeResume
 from resources.DataStore import StoresInfo, StoresResume, RemoteApi
+from resources.userJWT.user import UserLogin, UserLogout, UserRegister, TokenRefresh, UpdatePass, \
+    _user_parser_restore
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token
+from blacklist import BLACKLIST
+from models.user import UserModel
+
 
 
 ################################################### Global objects######################################
@@ -23,9 +29,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
 api = Api(app)
+jwt = JWTManager(app)
 
-TOKEN="XXXXXXX"
-CHAT_ID="xxxxxxx"
+TOKEN="1977946141:AAGSpj8Efw58oYaE9tRYSFknIzQGe_0cmrA"
+CHAT_ID="-525103909"
 
 ########################## Controller mapping  without classes ###########################################
 
@@ -101,14 +108,112 @@ def listen():
             yield msg
 
     return Response(stream(), mimetype='text/event-stream',headers={
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Access-Control-Allow-Origin': '*',
         'transfer-enconding':'chunked','Connection': 'Keep-Alive',
         'Keep-Alive': 'timeout=5, max = 1000'})
+
+
+
+
+
+"""
+`claims` are data we choose to attach to each jwt payload
+and for each jwt protected endpoint, we can retrieve these claims via `get_jwt_claims()`
+one possible use case for claims are access level control, which is shown below.
+"""
+
+
+@jwt.additional_claims_loader
+def add_claims_to_access_token(identity):  # Remember identity is what we define when creating the access token
+    if identity == 1:  # instead of hard-coding, we should read from a config file or database to get a list of admins instead
+        return {'is_admin': True}
+    return {'is_admin': False}
+
+
+# This method will check if a token is blacklisted, and will be called automatically when blacklist is enabled
+@jwt.token_in_blocklist_loader
+def check_if_token_in_blacklist(jwt_header, jwt_payload):
+    jti = jwt_payload["jti"]
+    return jti in BLACKLIST  # Here we blacklist particular JWTs that have been created in the past.
+
+
+# The following callbacks are used for customizing jwt response/error messages.
+# The original ones may not be in a very pretty format (opinionated)
+@jwt.expired_token_loader
+def expired_token_callback(jwt_header, jwt_payload):
+    return jsonify({
+        'message': 'The token has expired.',
+        'error': 'token_expired'
+    }), 401
+
+
+@jwt.invalid_token_loader
+def invalid_token_callback(error):  # we have to keep the argument here, since it's passed in by the caller internally
+    return jsonify({
+        'message': 'Signature verification failed.',
+        'error': 'invalid_token'
+    }), 401
+
+
+@jwt.unauthorized_loader
+def missing_token_callback(error):
+    return jsonify({
+        "description": "Request does not contain an access token.",
+        'error': 'authorization_required'
+    }), 401
+
+
+@jwt.needs_fresh_token_loader
+def token_not_fresh_callback(jwt_header, jwt_payload):
+    return jsonify({
+        "description": "The token is not fresh.",
+        'error': 'fresh_token_required'
+    }), 401
+
+
+@jwt.revoked_token_loader
+def revoked_token_callback(jwt_header, jwt_payload):
+    return jsonify({
+        "description": "The token has been revoked.",
+        'error': 'token_revoked'
+    }), 401
+class RestorePass(Resource):
+    def post(self):
+        data = _user_parser_restore.parse_args()
+        user = UserModel.find_by_username(data['username'])
+        if user:
+            new_token = create_access_token(identity=user['username'],
+                                            expires_delta=datetime.timedelta(seconds=1800),
+                                            additional_claims={"resetPass": True})
+            # Here logic to send the mail with delta token...
+            nameuser = user['username']
+            dictMail = {"subject": "reset your password BRAI",
+                        'sender': mail_settings["MAIL_USERNAME"],
+                        'recipients': user['mail'],
+                        'body': f'{nameuser}To  reset  your password pls use the token in the webpage ' + new_token,
+                        'mail_settings': mail_settings,
+                        'mail': mail,
+                        'html': '<p>' + nameuser +
+                                '  To  reset  your password ,from  <strong>BRAI</strong></p>' +
+                                '<p>  TOKEN: ' +
+                                '<strong>' + new_token + '</strong></p>'
+                        }
+            Thread(target=worker, daemon=True).start()
+            q.put(dictMail)
+            return {'access_token': new_token,
+                    'message': 'Reset token has been sent, please this only last for 30 min'}, 200
+        return {"message": "Invalid Username !"}, 401
 
 
 ############################## controllers from classes crud Resources ####################################
 
 
+api.add_resource(UserLogin, '/login')
+api.add_resource(TokenRefresh, '/refresh')
+api.add_resource(UserLogout, '/logout')
+api.add_resource(UserRegister, '/register')
+api.add_resource(RestorePass, '/resetpass')
+api.add_resource(UpdatePass, '/updatepass')
 
 api.add_resource(SeriesTime, '/series')
 api.add_resource(SeriesTimeResume, '/seriesresume')
