@@ -151,8 +151,8 @@ class UpdatePass(Resource):
         data = parser.parse_args()
         current_user = get_jwt_identity()
         user = UserModel.find_by_username(current_user)
-        if get_jwt()['resetPass'] and user and not check_password_hash(user['password'], data['password']):
-            user = UserModel(user['username'], user['password'], user['mail'], user['country'])
+        if get_jwt()['resetPass'] and user and not check_password_hash(user.password, data['password']):
+            
             user.password = generate_password_hash(data['password'])
             user.update_to_db()
             return {'message': 'password has been changed successfully'}, 200
