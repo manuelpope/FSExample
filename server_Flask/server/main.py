@@ -33,8 +33,9 @@ app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']  # allow blackl
 app.secret_key = 'super secret'  # could do app.config['JWT_SECRET_KEY'] if we prefer
 api = Api(app)
 jwt = JWTManager(app)
+q = queue.Queue()
 
-TOKEN="1977946141:AAGSpj8Efw58oYaE9tRYSFknIzQGe_0cmrA"
+TOKEN=""
 CHAT_ID="-525103909"
 
 ########################## Controller mapping  without classes ###########################################
@@ -94,8 +95,37 @@ def job_function():
                 task.sended_mail = 1
                 task.save_to_db()
 
+mail_settings = {
+    "MAIL_SERVER": 'smtp.gmail.com',
+    "MAIL_PORT": 465,
+    "MAIL_USE_TLS": False,
+    "MAIL_USE_SSL": True,
+    # "MAIL_USERNAME": os.environ['username'],
+    # "MAIL_PASSWORD": os.environ['******']
+    "MAIL_USERNAME": '*****',
+    "MAIL_PASSWORD": '******'
+}
+
+def worker():
+    # Aqui va el envio de correos o alguna tarea muy pesada que se encola/ como correos.
+    n = 1
+    while n > 0:
+        item = q.get()
+        # print(f'Working on {item}', q.qsize())
+        send_mail(item)
+        q.task_done()
+        n = q.qsize()
 
 
+def send_mail(dictMail):
+    with app.app_context():
+        mail_settings, mail, msg = dictMail['mail_settings'], dictMail['mail'], dictMail
+        message = Message(subject=msg['subject'],
+                          sender=mail_settings["MAIL_USERNAME"],
+                          recipients=[msg['recipients']],  # use your email for testing
+                          body=msg['body'],
+                          html=msg['html'])
+        mail.send(message=message)
 
 
 @app.route('/listen', methods=['GET'])
