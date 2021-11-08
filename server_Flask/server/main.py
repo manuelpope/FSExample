@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import numpy as np
-
+import json
 from flask import Flask,Response,jsonify
 import requests
 from flask_restful import Api,Resource
@@ -24,19 +24,23 @@ from models.user import UserModel
 
 
 ################################################### Global objects######################################
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['PROPAGATE_EXCEPTIONS'] = True
-app.config['JWT_BLACKLIST_ENABLED'] = True  # enable blacklist feature
-app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']  # allow blacklisting for access and refresh tokens
-app.secret_key = 'super secret'  # could do app.config['JWT_SECRET_KEY'] if we prefer
-api = Api(app)
-jwt = JWTManager(app)
-q = queue.Queue()
+##########TODO CARGAR DESDE ARCHIVO DE CONFIGURACIÓN
+with open('appConfig.json') as f:
+    dataConfig = json.load(f)
+for config in dataConfig.values():
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = config['SQLALCHEMY_DATABASE_URI']
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config['SQLALCHEMY_TRACK_MODIFICATIONS']
+    app.config['PROPAGATE_EXCEPTIONS'] = config['PROPAGATE_EXCEPTIONS']
+    app.config['JWT_BLACKLIST_ENABLED'] = config['JWT_BLACKLIST_ENABLED'] # enable blacklist feature
+    app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = config['JWT_BLACKLIST_TOKEN_CHECKS']  # allow blacklisting for access and refresh tokens
+    app.secret_key = config['secret_key'] # could do app.config['JWT_SECRET_KEY'] if we prefer
+    api = Api(app)
+    jwt = JWTManager(app)
+    q = queue.Queue()
 
-TOKEN=""
-CHAT_ID="-525103909"
+    TOKEN = config['TOKEN']
+    CHAT_ID = config['CHAT_ID']
 
 ########################## Controller mapping  without classes ###########################################
 

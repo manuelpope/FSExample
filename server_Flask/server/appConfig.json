@@ -1,0 +1,12 @@
+{
+  "config":{
+    "SQLALCHEMY_DATABASE_URI": "sqlite:///data.db",
+    "SQLALCHEMY_TRACK_MODIFICATIONS" : "False",
+    "PROPAGATE_EXCEPTIONS" : "True",
+    "JWT_BLACKLIST_ENABLED" : "True",
+    "JWT_BLACKLIST_TOKEN_CHECKS" : "['access', 'refresh']",
+    "secret_key" : "super secret",
+    "TOKEN" : "",
+    "CHAT_ID" : "-525103909"
+  }
+}
